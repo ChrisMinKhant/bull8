@@ -17,4 +17,6 @@ func (httpsFilter *httpsFilter) Do(response http.ResponseWriter, request *http.R
 	if request.TLS == nil {
 		filter.ErrorSigal <- " HTTPS FILTER FAILED "
 	}
+
+	filter.ErrorSigal <- ""
 }

@@ -8,6 +8,7 @@ import (
 
 	"github.com/ChrisMinKhant/megoyougo_framework/filter/filterchain"
 	"github.com/ChrisMinKhant/megoyougo_framework/provider/handlerprovider"
+	"github.com/ChrisMinKhant/megoyougo_framework/util"
 	"github.com/sirupsen/logrus"
 )
 
@@ -76,7 +77,7 @@ func (gateWay *gateWay) dispatchRequest(response http.ResponseWriter, request *h
 
 	response.Header().Set("Content-Type", "application/json")
 	response.WriteHeader(http.StatusNotFound)
-	json.NewEncoder(response).Encode(NewErrorResponse().status("NOT FOUND").message("Path not found.").path(request.RequestURI).timestamp(time.Now().String()))
+	json.NewEncoder(response).Encode(util.NewErrorResponse().SetStatus("NOT FOUND").SetMessage("Path not found.").SetPath(request.RequestURI).SetTimestamp(time.Now().String()))
 }
 
 func (gateWay *gateWay) fetchPathAndMethod(endpoint string) (string, string) {

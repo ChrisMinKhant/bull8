@@ -1,4 +1,4 @@
-package app
+package util
 
 type ErrorResponse struct {
 	Status    string `json:"status"`
@@ -11,22 +11,22 @@ func NewErrorResponse() *ErrorResponse {
 	return &ErrorResponse{}
 }
 
-func (errorResponse *ErrorResponse) status(status string) *ErrorResponse {
+func (errorResponse *ErrorResponse) SetStatus(status string) *ErrorResponse {
 	errorResponse.Status = status
 	return errorResponse
 }
 
-func (errorResponse *ErrorResponse) message(message string) *ErrorResponse {
+func (errorResponse *ErrorResponse) SetMessage(message string) *ErrorResponse {
 	errorResponse.Message = message
 	return errorResponse
 }
 
-func (errorResponse *ErrorResponse) path(path string) *ErrorResponse {
+func (errorResponse *ErrorResponse) SetPath(path string) *ErrorResponse {
 	errorResponse.Path = path
 	return errorResponse
 }
 
-func (errorResponse *ErrorResponse) timestamp(timestamp string) *ErrorResponse {
+func (errorResponse *ErrorResponse) SetTimestamp(timestamp string) *ErrorResponse {
 	errorResponse.Timestamp = timestamp
 	return errorResponse
 }
