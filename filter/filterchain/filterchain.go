@@ -4,9 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ChrisMinKhant/megoyougo_framework/exception"
-	"github.com/ChrisMinKhant/megoyougo_framework/filter"
 	"github.com/ChrisMinKhant/megoyougo_framework/filter/httpsfilter"
-	"github.com/sirupsen/logrus"
 )
 
 type FilterChain struct {
@@ -39,16 +37,20 @@ func (filterChain *FilterChain) Set() {
 	// filterChain.filterList.Add(authfilter.New())
 }
 
-func (filterChain *FilterChain) Invoke(response http.ResponseWriter, request *http.Request) {
-	defer filterChain.exception.RecoverPanic()
+// func (filterChain *FilterChain) Invoke(response http.ResponseWriter, request *http.Request) {
+// 	defer filterChain.exception.RecoverPanic()
 
-	filterChain.filterList.Invoke(response, request)
+// 	filterChain.filterList.Invoke(response, request)
 
-	if fetchedSignal := <-filter.ErrorSigal; fetchedSignal != "" {
+// 	if fetchedSignal := <-filter.ErrorSigal; fetchedSignal != "" {
 
-		logrus.Panicf("Filteration failed with error ::: [ %v ]\n", fetchedSignal)
+// 		logrus.Panicf("Filteration failed with error ::: [ %v ]\n", fetchedSignal)
 
-		response.WriteHeader(400)
-		response.Write(nil)
-	}
+// 		response.WriteHeader(400)
+// 		response.Write(nil)
+// 	}
+// }
+
+func (filterChain *FilterChain) Invoke(response http.ResponseWriter, request *http.Request) bool {
+	return filterChain.filterList.Invoke(response, request)
 }

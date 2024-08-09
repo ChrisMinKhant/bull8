@@ -1,2 +1,2 @@
 run:
-	go run /home/kaungminkhant/school-management-system/cmd/.
+	go run ~/megoyougo/cmd/.

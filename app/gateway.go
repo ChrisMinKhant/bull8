@@ -37,13 +37,17 @@ func (gateWay *gateWay) ServeHTTP(response http.ResponseWriter, request *http.Re
 
 	logrus.Info("The request reaches to the gateway.")
 
+	gateWay.handlePreflightRequest(response, request)
+
 	/*
 	 * The request will be filtered by
 	 * the defined filterchain in defined
 	 * order.
 	 */
 
-	gateWay.filterChain.Invoke(response, request)
+	if !gateWay.filterChain.Invoke(response, request) {
+		return
+	}
 
 	/*
 	 * The request is dispatched to
@@ -78,6 +82,20 @@ func (gateWay *gateWay) dispatchRequest(response http.ResponseWriter, request *h
 	response.Header().Set("Content-Type", "application/json")
 	response.WriteHeader(http.StatusNotFound)
 	json.NewEncoder(response).Encode(util.NewErrorResponse().SetStatus("NOT FOUND").SetMessage("Path not found.").SetPath(request.RequestURI).SetTimestamp(time.Now().String()))
+}
+
+func (gateWay *gateWay) handlePreflightRequest(response http.ResponseWriter, request *http.Request) {
+	if request.Method == "OPTIONS" {
+
+		response.Header().Set("Access-Control-Allow-Origin", "*")
+		response.Header().Set("Access-Control-Allow-Methods", "*")
+		response.Header().Set("Access-Control-Allow-Headers", "*")
+		response.Header().Set("Content-Type", "application/json")
+		response.WriteHeader(http.StatusOK)
+		json.NewEncoder(response).Encode("")
+		return
+
+	}
 }
 
 func (gateWay *gateWay) fetchPathAndMethod(endpoint string) (string, string) {
